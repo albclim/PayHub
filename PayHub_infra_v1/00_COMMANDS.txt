@@ -1,0 +1,41 @@
+
+aws configure
+
+aws configure --profile RDSYS-user
+
+============================================================================================
+
+terraform init
+
+terraform plan -var-file=".\01_tfvars.json"
+
+terraform apply -var-file=".\01_tfvars.json"
+
+terraform destroy -var-file=".\01_tfvars.json"
+
+============================================================================================
+
+
+http://checkip.amazonaws.com/
+
+
+https://app.cloudviz.io/
+
+
+https://cloudcraft.co/
+
+
+http://jodies.de/ipcalc
+
+
+============================================================================================
+
+
+terraform show -json <JsonOutcome>
+
+
+terraform state rm 'aws_db_instance.Postgres_DB_Instance'
+
+terraform apply -target aws_db_instance.Postgres_DB_Instance -var-file=".\02_tfvars.json"
+
+terraform destroy -target aws_db_instance.Postgres_DB_Instance -var-file=".\02_tfvars.json"

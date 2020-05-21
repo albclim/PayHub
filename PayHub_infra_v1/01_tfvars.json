@@ -1,0 +1,45 @@
+{
+    "aws_region": "eu-west-3",
+    "env": "RDSYS",
+    "vpc_cidr": "10.12.0.0/16",
+    "product": "RDSYS",
+    "temp_windows_user_name": "albgoncal",
+    "temp_windows_user_pass": "koke2020",
+    "username": "albgoncal",
+    "password": "koke2020",
+    "instance_type": "t2.micro",
+    "domain_name": "infra-RDSYS.local",
+    "dir_type": "SimpleAD",
+    "az_name_A": [
+        "eu-west-3a",
+        "eu-west-3b"
+    ],
+    "az_name_B": [
+        "eu-west-3c"
+    ],
+    "subnet_cidr_PRI": [
+        "10.12.0.0/25",
+        "10.12.0.128/25"
+    ],
+    "subnet_cidr_ISO": [
+        "10.12.1.0/25",
+        "10.12.1.128/25"
+    ],
+    "subnet_cidr_BACK": [
+        "10.12.2.0/25",
+        "10.12.2.128/25"
+    ],
+    "subnet_cidr_API": [
+        "10.12.3.0/25",
+        "10.12.3.128/25"
+    ],
+    "subnet_cidr_DIF":[
+        "10.12.4.0/25",
+        "10.12.4.128/25"
+    ],
+    "allocated_storage": "20",
+    "engine_name": "postgres",
+    "engine_version": "10.6",
+    "db_instance_type": "db.t2.small",
+    "db_name": "sample"
+}
