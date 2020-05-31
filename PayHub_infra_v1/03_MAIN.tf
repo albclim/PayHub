@@ -39,11 +39,3 @@ locals {
     },
   ]
 }
-
-# terraform {
-#   backend "s3" {
-#     bucket = "RDSYS-TFSTATES"
-#     key    = "infra-cm-instructors/terraform.tfstate"
-#     region = "${var.aws_region}"
-#   }
-# }

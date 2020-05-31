@@ -9,9 +9,15 @@ terraform init
 
 terraform plan -var-file=".\01_tfvars.json"
 
-terraform apply -var-file=".\01_tfvars.json"
+terraform apply -var-file=".\01_tfvars.json" -auto-approve
 
-terraform destroy -var-file=".\01_tfvars.json"
+terraform destroy -var-file=".\01_tfvars.json" -auto-approve
+
+terraform show -json
+
+terraform apply -target=aws_security_group.my_sg
+
+terraform destroy -target=aws_security_group.my_sg
 
 ============================================================================================
 

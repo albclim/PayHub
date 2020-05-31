@@ -12,13 +12,11 @@ resource "aws_route_table" "DIF_PRIVATE_ROUTE" {
     }
 }
 
-
 resource "aws_subnet" "DIF_PRIVATE_SUBNET" {
   map_public_ip_on_launch = false
   availability_zone       = element(var.az_name_B, 1)
   vpc_id                  = aws_vpc.RDSYS_VPC.id
   cidr_block              = element(var.subnet_cidr_DIF, 1)
-#  depends_on              = [aws_internet_gateway.DIF_IGW]
   tags = {
       "Name" = "DIF-PRIV-SUBNET-AZ"
     }

@@ -65,10 +65,12 @@ variable "subnet_cidr_BACK" {
   type    = list(string)
   default = [""]
 }
+
 variable "subnet_cidr_API" {
   type    = list(string)
   default = [""]
 }
+
 variable "subnet_cidr_DIF" {
   type    = list(string)
   default = [""]

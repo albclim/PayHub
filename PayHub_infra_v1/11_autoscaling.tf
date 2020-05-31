@@ -5,7 +5,7 @@ resource "tls_private_key" "app_private_key" {
 }
 
 resource "aws_key_pair" "generated_key" {
-  key_name   = "REDSS-KEY"
+  key_name   = "APP-KEY"
   public_key = tls_private_key.app_private_key.public_key_openssh
 }
 
@@ -13,17 +13,16 @@ resource "aws_key_pair" "generated_key" {
 
 resource "aws_autoscaling_attachment" "PRI_asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.PRI_asg.name
-  alb_target_group_arn   = aws_lb_target_group.PRISO_TG.arn                   #  ==============CAMBIAR AL NUEVO TARGET GROUP==========
-
-  #depends_on = [aws_autoscaling_group.app_asg]  =>use when dependency not visible to terraform
+  alb_target_group_arn   = aws_lb_target_group.PRI_TG.arn
 }
+
 
 resource "aws_autoscaling_group" "PRI_asg" {
   name_prefix          = "PRI-ASG"
   launch_configuration = aws_launch_configuration.WIN16_launch_conf.id
-#  availability_zones    = var.az_name_A                                          NOT USE IT, BETTER WITH vpc_zone_identifier
+
   vpc_zone_identifier = [
-    aws_subnet.PRI1_PUBLIC_SUBNET.id,                                         # ================== CHECK IF IT WORKS ================
+    aws_subnet.PRI1_PUBLIC_SUBNET.id,
     aws_subnet.PRI2_PRIVATE_SUBNET.id
   ]
   min_size             = "1"
@@ -32,27 +31,20 @@ resource "aws_autoscaling_group" "PRI_asg" {
   lifecycle {
     create_before_destroy = true
   }
-
-#  tags = {
-#    "PRI-ASG"
-#  }
 }
 
 # ========================================== AUTO SCALING ISO =======================================================================
 
 resource "aws_autoscaling_attachment" "ISO_asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.ISO_asg.name
-  alb_target_group_arn   = aws_lb_target_group.PRISO_TG.arn    #  ========================CAMBIAR AL NUEVO TARGET GROUP===============
-
-  #depends_on = [aws_autoscaling_group.app_asg]  =>use when dependency not visible to terraform
+  alb_target_group_arn   = aws_lb_target_group.ISO_TG.arn
 }
 
 resource "aws_autoscaling_group" "ISO_asg" {
   name_prefix          = "ISO-ASG"
   launch_configuration = aws_launch_configuration.WIN16_launch_conf.id
-#   availability_zones    = var.az_name_A                                          NOT USE IT, BETTER WITH vpc_zone_identifier
   vpc_zone_identifier = [
-    aws_subnet.ISO1_PUBLIC_SUBNET.id,                                         # ================== CHECK IF IT WORKS ================
+    aws_subnet.ISO1_PUBLIC_SUBNET.id,
     aws_subnet.ISO2_PRIVATE_SUBNET.id
   ]
   min_size             = "1"
@@ -61,10 +53,6 @@ resource "aws_autoscaling_group" "ISO_asg" {
   lifecycle {
     create_before_destroy = true
   }
-
-#  tags = {
-#    "PRISO-ASG"
-#  }
 }
 
 # ===================================== IMAGES ===============================================================
@@ -76,7 +64,7 @@ resource "aws_launch_configuration" "UBUNTU_launch_conf" {
   user_data                   = data.template_file.ubuntu-config-template.rendered
   associate_public_ip_address = false
   iam_instance_profile        = aws_iam_instance_profile.app_instance_profile.name
-  security_groups             = [aws_security_group.RDSYS_SG.id, aws_security_group.GATE_SG.id]   # =================== CAMBIAR CON NUEVO SEC GROUP===================
+  security_groups             = [aws_security_group.RDSYS_SG.id, aws_security_group.GATE_SG.id]
   key_name                    = aws_key_pair.generated_key.key_name
   root_block_device {
     volume_size           = "60"
@@ -95,7 +83,7 @@ resource "aws_launch_configuration" "WIN16_launch_conf" {
   user_data                   = data.template_file.windows-config-template.rendered
   associate_public_ip_address = false
   iam_instance_profile        = aws_iam_instance_profile.app_instance_profile.name
-  security_groups             = [aws_security_group.RDSYS_SG.id, aws_security_group.GATE_SG.id] # =================== CAMBIAR CON NUEVO SEC GROUP===================
+  security_groups             = [aws_security_group.RDSYS_SG.id, aws_security_group.GATE_SG.id]
   key_name                    = aws_key_pair.generated_key.key_name
   root_block_device {
     volume_size           = "60"
@@ -106,23 +94,3 @@ resource "aws_launch_configuration" "WIN16_launch_conf" {
     create_before_destroy = true
   }
 }
-
-
-
-
-
-# ========================== EN CASO DE QUE FALLE PRISO_ASG_ATTACHMENT =================
-/*
-resource "aws_autoscaling_attachment" "PRISO_asg_attachment" {
-  autoscaling_group_name = aws_autoscaling_group.PRISO_asg.name
-  alb_target_group_arn   = aws_lb_target_group.PRISO_TG.arn    #  ========================CAMBIAR AL NUEVO TARGET GROUP===============
-
-  #depends_on = [aws_autoscaling_group.app_asg]  =>use when dependency not visible to terraform
-}
-resource "aws_autoscaling_attachment" "PRISO_asg_attachment" {
-  autoscaling_group_name = aws_autoscaling_group.PRISO_asg.name
-  alb_target_group_arn   = aws_lb_target_group.PRISO_TG.arn    #  ========================CAMBIAR AL NUEVO TARGET GROUP===============
-
-  #depends_on = [aws_autoscaling_group.app_asg]  =>use when dependency not visible to terraform
-}
-*/

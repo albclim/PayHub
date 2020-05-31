@@ -3,8 +3,8 @@
 Write-Output "---------------------------------------"
 Write-Output "Setting up Temporary Windows Admininistrator to interact with WinRM..."
 
-net user ${INSTANCE_USERNAME} '${INSTANCE_PASSWORD}' /add /y
-net localgroup administrators ${INSTANCE_USERNAME} /add
+net user ${"albgoncal"} '${"Koke@2020"}' /add /y
+net localgroup administrators ${"albgoncal"} /add
 
 Write-Output "---------------------------------------"
 Write-Output "Setting up WinRM..."

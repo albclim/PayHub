@@ -7,34 +7,7 @@ resource "aws_network_acl" "PUBL_NACL" {
       aws_subnet.ISO1_PUBLIC_SUBNET.id,
       aws_subnet.BACK_PUBLIC_SUBNET.id
     ]
-/*
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 23
-    to_port    = 23
-  }
 
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 101
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 80
-    to_port    = 80
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 102
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 3389
-    to_port    = 3390
-  }
-  */
   ingress {
     protocol   = "-1"
     rule_no    = 103
@@ -43,10 +16,18 @@ resource "aws_network_acl" "PUBL_NACL" {
     from_port  = 0
     to_port    = 0
   }
+    ingress {
+        protocol   = "-1"
+        rule_no    = 105
+        action     = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port  = 0
+        to_port    = 0
+    }
 
   egress {
     protocol   = "-1"
-    rule_no    = 104
+    rule_no    = 106
     action     = "allow"
     cidr_block = "0.0.0.0/0"
     from_port  = 0
@@ -57,7 +38,6 @@ resource "aws_network_acl" "PUBL_NACL" {
       "Name" = "BACK-NACL"
     }
 }
-
 
 resource "aws_network_acl" "PRIV_NACL" {
   vpc_id     = aws_vpc.RDSYS_VPC.id
@@ -97,6 +77,14 @@ resource "aws_network_acl" "PRIV_NACL" {
         rule_no    = 203
         action     = "allow"
         cidr_block = "88.22.118.201/32"
+        from_port  = 0
+        to_port    = 0
+    }
+    ingress {
+        protocol   = "-1"
+        rule_no    = 204
+        action     = "allow"
+        cidr_block = "0.0.0.0/0"
         from_port  = 0
         to_port    = 0
     }

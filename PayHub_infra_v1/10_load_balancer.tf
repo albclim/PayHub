@@ -3,7 +3,7 @@ resource "aws_lb" "PRI_alb" {
   internal                   = true
   load_balancer_type         = "application"
   idle_timeout               = 600
-  security_groups            = [aws_security_group.PRI_ALB_SG.id]   # =================== CAMBIAR CON NUEVO SEC GROUP===================
+  security_groups            = [aws_security_group.PRI_ALB_SG.id]
   subnets                    = [
     aws_subnet.PRI1_PUBLIC_SUBNET.id,
     aws_subnet.PRI2_PRIVATE_SUBNET.id
@@ -21,7 +21,7 @@ resource "aws_lb" "ISO_alb" {
   internal                   = true
   load_balancer_type         = "application"
   idle_timeout               = 600
-  security_groups            = [aws_security_group.ISO_ALB_SG.id]   # =================== CAMBIAR CON NUEVO SEC GROUP===================
+  security_groups            = [aws_security_group.ISO_ALB_SG.id]
   subnets                    = [
     aws_subnet.ISO1_PUBLIC_SUBNET.id,
     aws_subnet.ISO2_PRIVATE_SUBNET.id
@@ -62,6 +62,13 @@ resource "aws_security_group" "PRI_ALB_SG" {
       to_port   = 0
       protocol  = "-1"
       cidr_blocks = ["88.22.118.201/32"]
+    }
+
+    ingress {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
     }
 
     egress {
@@ -106,14 +113,14 @@ resource "aws_security_group" "ISO_ALB_SG" {
     }
 }
 
-resource "aws_lb_target_group" "PRISO_TG" {
-  name        = "PRISO-LB-TG"
+resource "aws_lb_target_group" "PRI_TG" {
+  name        = "PRI-LB-TG"
   port        = "80"
   protocol    = "HTTP"
   vpc_id      = aws_vpc.RDSYS_VPC.id
   target_type = "instance"
   tags = {
-      "Name" = "PRISO-LB-TG"
+      "Name" = "PRI-LB-TG"
   }
 
   lifecycle {
@@ -130,6 +137,29 @@ resource "aws_lb_target_group" "PRISO_TG" {
   }
 }
 
+resource "aws_lb_target_group" "ISO_TG" {
+  name        = "ISO-LB-TG"
+  port        = "80"
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.RDSYS_VPC.id
+  target_type = "instance"
+  tags = {
+      "Name" = "ISO-LB-TG"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [name]
+  }
+
+  health_check {
+    interval            = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+    matcher             = "200"
+  }
+}
 
 resource "aws_lb_listener" "PRI_http_listener" {
   load_balancer_arn = aws_lb.PRI_alb.arn
@@ -138,7 +168,7 @@ resource "aws_lb_listener" "PRI_http_listener" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.PRISO_TG.arn
+    target_group_arn = aws_lb_target_group.PRI_TG.arn
   }
 }
 
@@ -150,7 +180,7 @@ resource "aws_lb_listener" "ISO_http_listener" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.PRISO_TG.arn
+    target_group_arn = aws_lb_target_group.ISO_TG.arn
   }
 }
 
