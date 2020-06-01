@@ -3,3 +3,7 @@ PayHub_infra_v1/.terraform/plugins/windows_amd64/lock.json
 PayHub_infra_v1/.terraform/plugins/windows_amd64/terraform-provider-aws_v2.64.0_x4.exe
 PayHub_infra_v1/.terraform/plugins/windows_amd64/terraform-provider-template_v2.1.2_x4.exe
 PayHub_infra_v1/.terraform/plugins/windows_amd64/terraform-provider-tls_v2.1.1_x4.exe
+PayHub_infra_v1.2/.terraform/plugins/windows_amd64/lock.json
+PayHub_infra_v1.2/.terraform/plugins/windows_amd64/terraform-provider-aws_v2.64.0_x4.exe
+PayHub_infra_v1.2/.terraform/plugins/windows_amd64/terraform-provider-template_v2.1.2_x4.exe
+PayHub_infra_v1.2/.terraform/plugins/windows_amd64/terraform-provider-tls_v2.1.1_x4.exe
