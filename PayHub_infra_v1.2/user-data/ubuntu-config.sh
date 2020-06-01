@@ -38,5 +38,5 @@ sudo apt-get install x11vnc
 
 cd ~
 git clone https://github.com/albclim/PayHub.git
-cd PayHub_v1/
+cd PayHub_infra_v1.2/
 git pull
